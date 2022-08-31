@@ -28,8 +28,6 @@ const TemperatureChart = ({ dataset, labels }) => {
     datasets: dataset,
   };
 
-  console.log(dataset[0].data);
-
   return <Line datasetIdKey='id' data={config} />;
 };
 

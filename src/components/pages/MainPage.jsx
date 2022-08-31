@@ -13,35 +13,16 @@ const MainPage = () => {
   const [dataset, setDataset] = useState();
   const [refresh, isRefreshing] = useState(false);
 
-  useEffect(() => {
-    fetch(`${baseURL}${temperatureList}`)
-      .then((response) => response.json())
-      .then((data) => {
-        setLabels(returnLabels(data));
-        setDataset(returnDataset(data));
-        isRefreshing(false);
-      });
-  }, [refresh]);
-
   const returnLabels = (data) => {
     if (data.length > 0) {
       const labelsArray = [];
 
-      data.map((item) => {
-        labelsArray.push(cleanData(item.timestamp));
-      });
+      data.forEach((item) => labelsArray.push(cleanData(item.timestamp)));
 
       return labelsArray;
     }
 
     return [];
-  };
-
-  const refreshPage = () => {
-    isRefreshing(true);
-    if (refresh) {
-      window.location.reload();
-    }
   };
 
   const cleanData = (timestamp) => {
@@ -55,9 +36,7 @@ const MainPage = () => {
       const datasetArray = [];
       const dataValues = [];
 
-      data.map((item) => {
-        dataValues.push(item.temperatura);
-      });
+      data.forEach((item) => dataValues.push(item.temperatura));
 
       datasetArray.push({
         id: 1,
@@ -72,6 +51,23 @@ const MainPage = () => {
 
     return [];
   };
+
+  const refreshPage = () => {
+    isRefreshing(true);
+    if (refresh) {
+      window.location.reload();
+    }
+  };
+
+  useEffect(() => {
+    fetch(`${baseURL}${temperatureList}`)
+      .then((response) => response.json())
+      .then((data) => {
+        setLabels(returnLabels(data));
+        setDataset(returnDataset(data));
+        isRefreshing(false);
+      });
+  }, [refresh]);
 
   return (
     labels &&
